@@ -1,12 +1,9 @@
 import 'package:flutter_graphql/user/model/entity/user_graphql_entit.dart';
 
-class AuthEntity {
-  String? token;
+class UserFullDataGraphQlEntity {
   UserGraphQlEntity? user;
-  String? err = "";
 
-  AuthEntity.fromJson(Map<String, dynamic> map) {
-    token = map['token'];
+  UserFullDataGraphQlEntity.fromJson(Map<String, dynamic> map) {
     var userJson = map['user'];
     if (userJson != null) {
       user = UserGraphQlEntity.fromJson(userJson);

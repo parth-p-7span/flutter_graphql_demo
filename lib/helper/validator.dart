@@ -1,17 +1,16 @@
-
 import 'email_validator.dart';
 
 class Validator {
-  Stream<bool> isValidEmail(String email) {
+  Stream<bool> isValidEmail(String? email) {
     return Stream.value(email != null && EmailValidator.validate(email));
   }
 
-  Stream<bool> isValidPassword(String password) {
-    return Stream.value((password.trim().length ?? 0) > 3);
+  Stream<bool> isValidPassword(String? password) {
+    return Stream.value((password?.trim().length ?? 0) > 3);
   }
 
-  Stream<bool> isValidName(String firstName) {
-    return Stream.value((firstName.trim().isNotEmpty ?? false));
+  Stream<bool> isValidName(String? firstName) {
+    return Stream.value((firstName?.trim().isNotEmpty ?? false));
   }
 
   Stream<bool> isValidMobile(String mobile) {
@@ -33,5 +32,4 @@ class Validator {
   Stream<bool> isValidIntValue(int value) {
     return Stream.value((value != null) ?? false);
   }
-
 }

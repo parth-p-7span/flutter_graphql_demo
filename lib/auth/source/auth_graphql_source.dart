@@ -1,4 +1,6 @@
+import 'package:flutter_graphql/auth/model/request/login_request.dart';
 import 'package:flutter_graphql/auth/model/request/signup_request.dart';
+import 'package:flutter_graphql/auth/model/response/get_login_graphql_response.dart';
 import 'package:flutter_graphql/auth/model/response/get_signup_graphql_response.dart';
 import 'package:flutter_graphql/graphql/client.dart';
 
@@ -10,18 +12,14 @@ class AuthGraphQlSource {
   AuthGraphQlSource(this._client);
 
   /// Login
-  // Stream<GetLoginGraphQlResponse> login(LoginRequest request) {
-  //   return _openClient.mutateString(AuthGraphQlRequests.loginQuery, variables: {
-  //     'email': request.email,
-  //     'password': request.password,
-  //     'source': 'mobile',
-  //     'appVersion': request.appVersion,
-  //     'appOs': request.os,
-  //     'deviceId': request?.deviceId ?? '',
-  //     'appDetails': request.deviceInfo,
-  //     'deviceVersion': request.deviceVersion,
-  //   }, forceLog: true).map((response) => GetLoginGraphQlResponse.fromJson(response));
-  // }
+  Stream<GetLoginGraphQlResponse> login(LoginRequest request) {
+    return _client.mutateString(AuthGraphQlRequests.loginQuery, variables: {
+      'email': request.email,
+      'password': request.password,
+    }).map((response) {
+      return GetLoginGraphQlResponse.fromJson(response);
+    });
+  }
 
   /// SignUp
   Stream<GetSignUpGraphQlResponse> signUp(SignUpRequest request) {

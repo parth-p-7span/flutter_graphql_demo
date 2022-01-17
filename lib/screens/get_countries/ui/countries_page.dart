@@ -40,7 +40,9 @@ class _CountriesPageState extends State<CountriesPage> {
               if (state?.isLoading() ?? false) {
                 return buildShimmerLoading();
               }
-              if (state?.isError() ?? false) {}
+              if (state?.isError() ?? false) {
+                print("Error State !!!!!!!!!!!!");
+              }
               return StreamBuilder<CountryData?>(
                 stream: _countryBloc?.countryDataStream,
                 initialData: _countryBloc?.countryDataStream.valueOrNull,

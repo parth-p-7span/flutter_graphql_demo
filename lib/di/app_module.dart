@@ -1,4 +1,5 @@
 import 'package:flutter_graphql/graphql/client.dart';
+import 'package:flutter_graphql/helper/shared_preference_manager.dart';
 
 class AppModule {
   static final _instance = AppModule._internal();
@@ -7,6 +8,8 @@ class AppModule {
   factory AppModule() {
     return _instance;
   }
+
+  final sharedPreferenceManager = SharedPreferenceManager();
 
   late AppGraphqlClient graphqlClient;
 }

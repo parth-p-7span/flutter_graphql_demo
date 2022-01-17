@@ -12,4 +12,17 @@ class AuthGraphQlRequests {
       }
      }
   ''';
+
+  static String loginQuery = r''' 
+   mutation login($email:String,$password:String){
+  login(input:{email:$email,password:$password}){
+    token
+    user{
+      id
+      name
+      email
+    }
+  }
+}	
+  ''';
 }

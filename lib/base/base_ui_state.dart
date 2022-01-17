@@ -7,7 +7,7 @@ class BaseUiState<T> {
 
   BaseUiState.loading() : this._state = UiState.loading;
   BaseUiState.completed({this.data}) : this._state = UiState.completed;
-  BaseUiState.error() : this._state = UiState.error;
+  BaseUiState.error({this.error}) : this._state = UiState.error;
 
   bool isLoading() => this._state == UiState.loading;
   bool isCompleted() => this._state == UiState.completed;

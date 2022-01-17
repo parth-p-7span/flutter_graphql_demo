@@ -1,8 +1,7 @@
-import 'package:flutter_graphql/auth/event/signup_event.dart';
-import 'package:flutter_graphql/auth/model/auth_data.dart';
-import 'package:flutter_graphql/auth/model/request/signup_request.dart';
+import 'package:flutter_graphql/auth/event/login_event.dart';
+import 'package:flutter_graphql/auth/model/request/login_request.dart';
 import 'package:flutter_graphql/auth/repo/auth_repo.dart';
-import 'package:flutter_graphql/auth/state/sign_up_state.dart';
+import 'package:flutter_graphql/auth/state/login_state.dart';
 import 'package:flutter_graphql/auth/state/validation_passed_state.dart';
 import 'package:flutter_graphql/base/app_exception.dart';
 import 'package:flutter_graphql/base/base_bloc.dart';
@@ -10,18 +9,12 @@ import 'package:flutter_graphql/base/validation_exception_state.dart';
 import 'package:flutter_graphql/helper/validator.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SignupBloc extends BaseBloc {
-  /// Holds user entered name
-  final name = BehaviorSubject<String>();
-
+class LoginBloc extends BaseBloc {
   /// Holds user entered email
   final email = BehaviorSubject<String>();
 
   /// Holds user entered password
   final password = BehaviorSubject<String>();
-
-  /// Stream which will notify when name validation error occurs
-  final nameError = PublishSubject<bool?>();
 
   /// Stream which will notify when email validation error occurs
   final emailError = PublishSubject<bool>();
@@ -35,44 +28,43 @@ class SignupBloc extends BaseBloc {
   /// Authentication repo
   final AuthRepo _authRepo;
 
-  /// Rx-Stream which will notify about sign up states.
-  final signUpStateStream = PublishSubject<SignUpState>();
+  /// Rx-Stream which will notify about login states.
+  final loginStateStream = PublishSubject<LoginState>();
 
-  SignupBloc(
-    this._validator,
-    this._authRepo,
-  ) {
+  LoginBloc(this._validator, this._authRepo) {
     _observeForEvents();
     _observeForStates();
   }
 
-  /// Handle sign up click
-  void onSignUpTapped() async {
-    // Create sign up event
-    event.add(SignUpEvent(
-      SignUpRequest(
-        name: name.value,
+  /// Handle login click
+  void onLoginTapped() async {
+    // Create login event
+    event.add(LoginEvent(
+      LoginRequest(
         email: email.value,
         password: password.value,
       ),
     ));
   }
 
-  Stream<SignUpState> _signUp(SignUpRequest request) {
+  /// Converts login process into representable [LoginState]
+  Stream<LoginState> _login(LoginRequest request) {
     hideKeyboard();
 
     return _authRepo
-        .signUp(request)
-        .map((value) => SignUpState.completed(value))
-        .onErrorReturnWith((error, dynamic) => SignUpState.error(error))
-        .startWith(SignUpState.loading());
+        .login(request)
+        .map((value) => LoginState.completed(value))
+        .onErrorReturnWith((error, dynamic) {
+      print("---------------Error : " + error.toString());
+      return LoginState.error(error);
+    }).startWith(LoginState.loading());
   }
 
   /// Observe for events
   void _observeForEvents() {
     subscriptions.add(event.listen((event) {
-      if (event is SignUpEvent) {
-        _handleSignUpEvent(event);
+      if (event is LoginEvent) {
+        _handleLoginEvent(event);
       }
     }));
   }
@@ -83,41 +75,35 @@ class SignupBloc extends BaseBloc {
       if (state is ValidationExceptionState) {
         _handleValidationErrorState(state);
       }
-      if (state is SignUpState) {
-        _handleSignUpState(state);
+      if (state is LoginState) {
+        _handleLoginState(state);
       }
 
       if (state is ValidationPassedState) {
         // Notify UI that there are no more validation errors
-        nameError.add(false);
         emailError.add(false);
         passwordError.add(false);
-
       }
     }));
   }
 
-  /// Handle sign up event
-  void _handleSignUpEvent(SignUpEvent event) {
-    String? name = event.data.name;
+  /// Handle login event
+  void _handleLoginEvent(LoginEvent event) {
     String? email = event.data.email;
     String? password = event.data.password;
 
-    subscriptions.add(Rx.zip([
-      _validator.isValidName(name),
-      _validator.isValidEmail(email),
-      _validator.isValidPassword(password),
-    ], (values) {
+    subscriptions.add(Rx.zip(
+        [_validator.isValidEmail(email), _validator.isValidPassword(password)],
+        (values) {
       final errorMap = Map<String, bool>();
 
-      if (values[0] == false) errorMap['name'] = true;
-      if (values[1] == false) errorMap['email'] = true;
-      if (values[2] == false) errorMap['password'] = true;
+      if (values[0] == false) errorMap['email'] = true;
+      if (values[1] == false) errorMap['password'] = true;
 
       if (errorMap.isNotEmpty) throw ValidationException(error: errorMap);
 
       return event.data;
-    }).flatMap((signUpRequest) => _signUp(signUpRequest)).listen((state) {
+    }).flatMap((loginRequest) => _login(loginRequest)).listen((state) {
       this.state.add(state);
     }, onError: (e) {
       if (e is ValidationException) {
@@ -130,30 +116,27 @@ class SignupBloc extends BaseBloc {
   /// Handle validation exception state
   void _handleValidationErrorState(ValidationExceptionState state) {
     final errors = state.data;
-    nameError.add(errors!.containsKey('name'));
-    emailError.add(errors.containsKey('email'));
+    emailError.add(errors!.containsKey('email'));
     passwordError.add(errors.containsKey('password'));
   }
 
-  /// Handle sign up state
-  void _handleSignUpState(SignUpState state) {
-    // SignUp API is being called, that means we passed client side
+  /// Handle login state
+  void _handleLoginState(LoginState state) {
+    // Login API is being called, that means we passed client side
     // validations. Inform UI about this state.
     if (state.isLoading()) {
       this.state.add(ValidationPassedState());
     }
-    signUpStateStream.add(state);
+    loginStateStream.add(state);
   }
 
   @override
   void dispose() {
     super.dispose();
-    name.close();
     email.close();
     password.close();
-    nameError.close();
     emailError.close();
     passwordError.close();
-    signUpStateStream.close();
+    loginStateStream.close();
   }
 }
