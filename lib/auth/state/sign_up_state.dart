@@ -6,5 +6,5 @@ class SignUpState extends BaseUiState<AuthData> {
 
   SignUpState.completed(AuthData data) : super.completed(data: data);
 
-  SignUpState.error(dynamic error) : super.error();
+  SignUpState.error(dynamic error) : super.error(error);
 }

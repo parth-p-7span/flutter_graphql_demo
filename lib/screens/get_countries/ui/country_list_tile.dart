@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/screens/get_countries/model/country.dart';
-import 'package:flutter_graphql/screens/get_countries/ui/country_detail.dart';
 import 'package:flutter_graphql/screens/get_countries/ui/dialog/country_detail_dialog.dart';
 import 'package:flutter_graphql/screens/get_countries/ui/helper/dialog_helper.dart';
 import 'package:flutter_graphql/theme_data.dart';
@@ -32,14 +31,16 @@ class CountryListTileWidget extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                child: Text(country?.name.toString() ?? "",
-                    style: GoogleFonts.lato(
-                      textStyle: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      ),
-                    )),
+                child: Text(
+                  country?.name.toString() ?? "",
+                  style: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

@@ -4,6 +4,7 @@ import 'package:flutter_graphql/screens/get_countries/di/country_module.dart';
 import 'package:flutter_graphql/screens/get_countries/model/country_data.dart';
 import 'package:flutter_graphql/screens/get_countries/state/get_countries_state.dart';
 import 'package:flutter_graphql/screens/get_countries/ui/country_list_tile.dart';
+import 'package:flutter_graphql/utils/app_utils.dart';
 import 'package:flutter_graphql/widgets/custom_appbar.dart';
 import 'package:flutter_graphql/widgets/shimmer_effect.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,7 @@ class CountriesPage extends StatefulWidget {
 
 class _CountriesPageState extends State<CountriesPage> {
   CountryBloc? _countryBloc;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -28,7 +30,8 @@ class _CountriesPageState extends State<CountriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar("Countries", true),
+      key: _scaffoldKey,
+      appBar: CustomAppbar("Countries", true, false),
       body: Container(
         color: Colors.white,
         child: StreamBuilder<GetCountriesState>(
@@ -42,6 +45,14 @@ class _CountriesPageState extends State<CountriesPage> {
               }
               if (state?.isError() ?? false) {
                 print("Error State !!!!!!!!!!!!");
+                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                  AppUtils.showSnackBar(
+                    state?.error?.toString() ??
+                        'Something went wrong, please try again!',
+                    _scaffoldKey,
+                    isError: true,
+                  );
+                });
               }
               return StreamBuilder<CountryData?>(
                 stream: _countryBloc?.countryDataStream,

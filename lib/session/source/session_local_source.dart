@@ -5,6 +5,7 @@ import 'package:flutter_graphql/session/mapper/user_entity_mapper.dart';
 import 'package:flutter_graphql/session/model/entity/session_local_entity.dart';
 import 'package:flutter_graphql/session/model/request/save_session_request.dart';
 import 'package:flutter_graphql/session/model/request/user_session_request.dart';
+import 'package:flutter_graphql/user/mapper/user_graphql_entity_mapper.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SessionLocalSource {
@@ -13,7 +14,7 @@ class SessionLocalSource {
 
   /// Mapper
   final SessionEntityMapper? _sessionEntityMapper;
-  final UserEntityMapper? _userEntityMapper;
+  final UserGraphqlEntityMapper? _userEntityMapper;
 
   SessionLocalSource(
     this._preferenceManager,
@@ -36,7 +37,7 @@ class SessionLocalSource {
     final userEntity = _userEntityMapper?.reverseMap(request.user);
 
     return getSession().flatMap((event) {
-      event?.userLocalEntity = userEntity;
+      event?.userGraphQlEntity = userEntity;
       return saveSession(
           SaveSessionRequest(session: _sessionEntityMapper?.map(event)));
     });
@@ -53,6 +54,6 @@ class SessionLocalSource {
   }
 
   Stream<bool>? clearSession() {
-    return _preferenceManager!.setString('session', '');
+    return _preferenceManager!.setString('session', null);
   }
 }

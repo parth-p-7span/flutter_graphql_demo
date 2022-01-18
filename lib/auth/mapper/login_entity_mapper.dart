@@ -7,6 +7,7 @@ class LoginEntityMapper extends BaseMapper<GetLoginGraphQlResponse, AuthData> {
   AuthData map(GetLoginGraphQlResponse t) {
     return AuthData(
       token: t.authEntity?.token,
+      user: t.authEntity?.user,
     );
   }
 }

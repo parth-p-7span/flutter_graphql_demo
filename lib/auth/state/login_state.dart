@@ -6,5 +6,5 @@ class LoginState extends BaseUiState<AuthData> {
 
   LoginState.completed(AuthData data) : super.completed(data: data);
 
-  LoginState.error(dynamic error) : super.error(error: error);
+  LoginState.error(dynamic error) : super.error(error);
 }

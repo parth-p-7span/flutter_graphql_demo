@@ -14,22 +14,22 @@ class Validator {
   }
 
   Stream<bool> isValidMobile(String mobile) {
-    return Stream.value((mobile.trim().length ?? 0) > 4);
+    return Stream.value((mobile.trim().length) > 4);
   }
 
   Stream<bool> isValidPassCode(String passCode) {
-    return Stream.value((passCode.trim().length ?? 0) > 3);
+    return Stream.value((passCode.trim().length) > 3);
   }
 
   Stream<bool> isValidDoubleValue(double value) {
-    return Stream.value((value > 0) ?? false);
+    return Stream.value((value > 0));
   }
 
   Stream<bool> isValidValue(double value) {
-    return Stream.value((value != null) ?? false);
+    return Stream.value((value != null));
   }
 
   Stream<bool> isValidIntValue(int value) {
-    return Stream.value((value != null) ?? false);
+    return Stream.value((value != null));
   }
 }

@@ -6,5 +6,5 @@ class GetCountriesState extends BaseUiState<CountryData> {
 
   GetCountriesState.completed(CountryData data) : super.completed(data: data);
 
-  GetCountriesState.error(dynamic error) : super.error();
+  GetCountriesState.error(dynamic error) : super.error(error);
 }

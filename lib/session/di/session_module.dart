@@ -3,6 +3,7 @@ import 'package:flutter_graphql/session/mapper/session_entity_mapper.dart';
 import 'package:flutter_graphql/session/mapper/user_entity_mapper.dart';
 import 'package:flutter_graphql/session/repo/session_repo.dart';
 import 'package:flutter_graphql/session/source/session_local_source.dart';
+import 'package:flutter_graphql/user/mapper/user_graphql_entity_mapper.dart';
 
 class SessionModule {
   static SessionModule _instance = SessionModule._internal();
@@ -33,7 +34,7 @@ class SessionModule {
     return SessionEntityMapper();
   }
 
-  UserEntityMapper getUserEntityMapper() {
-    return UserEntityMapper();
+  UserGraphqlEntityMapper getUserEntityMapper() {
+    return UserGraphqlEntityMapper();
   }
 }

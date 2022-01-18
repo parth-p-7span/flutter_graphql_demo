@@ -19,6 +19,7 @@ class AuthGraphQlRequests {
     token
     user{
       id
+      uuid
       name
       email
     }

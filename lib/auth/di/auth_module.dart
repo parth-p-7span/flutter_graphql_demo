@@ -9,6 +9,7 @@ import 'package:flutter_graphql/graphql/client.dart';
 import 'package:flutter_graphql/helper/validator.dart';
 import 'package:flutter_graphql/main_dev.dart';
 import 'package:flutter_graphql/session/di/session_module.dart';
+import 'package:flutter_graphql/session/repo/session_repo.dart';
 
 class AuthModule {
   static AuthModule _instance = AuthModule._internal();
@@ -22,16 +23,12 @@ class AuthModule {
 
   LoginBloc getLoginBloc() {
     return LoginBloc(
-      Validator(),
-      getAuthRepo(),
-    );
+        Validator(), getAuthRepo(), SessionModule().getSessionRepo());
   }
 
   SignupBloc getSignUpBloc() {
     return SignupBloc(
-      Validator(),
-      getAuthRepo(),
-    );
+        Validator(), getAuthRepo(), SessionModule().getSessionRepo());
   }
 
   AuthRepo getAuthRepo() {

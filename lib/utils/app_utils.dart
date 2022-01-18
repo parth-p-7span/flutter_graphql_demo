@@ -5,7 +5,7 @@ class AppUtils {
   static void showSnackBar(String message, GlobalKey<ScaffoldState> key,
       {bool isError = false}) {
     if (key == null || key.currentState == null) return;
-    if (message.isEmpty ?? true) return;
+    if (message.isEmpty) return;
 
     key.currentState!.showSnackBar(
       getSnackBar(message, isError: isError),

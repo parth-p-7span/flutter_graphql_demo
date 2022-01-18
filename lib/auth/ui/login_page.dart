@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/auth/bloc/login_bloc.dart';
 import 'package:flutter_graphql/auth/di/auth_module.dart';
@@ -6,6 +7,9 @@ import 'package:flutter_graphql/auth/ui/signup_page.dart';
 import 'package:flutter_graphql/base/base_bloc.dart';
 import 'package:flutter_graphql/screens/get_continent/ui/continent_page.dart';
 import 'package:flutter_graphql/base/base_state.dart';
+import 'package:flutter_graphql/session/di/session_module.dart';
+import 'package:flutter_graphql/session/model/session.dart';
+import 'package:flutter_graphql/session/repo/session_repo.dart';
 import 'package:flutter_graphql/utils/app_utils.dart';
 import '../../theme_data.dart';
 import 'package:rxdart/rxdart.dart';
@@ -20,10 +24,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends BaseState<LoginPage> {
   late LoginBloc _loginBloc;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  late SessionRepo _sessionRepo;
 
   @override
   void initState() {
     super.initState();
+    _sessionRepo = SessionModule().getSessionRepo();
     _loginBloc = AuthModule().getLoginBloc();
     _observeForLoginStates();
   }
@@ -46,135 +52,138 @@ class _LoginPageState extends BaseState<LoginPage> {
         child: Container(
           color: MyTheme.listTileColor,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 100,
-              ),
-              Center(
-                child: Text(
-                  "Login",
-                  style: titleStyle,
-                ),
-              ),
-
-              ///email
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10),
-                child: Container(
-                  child: Text(
-                    "Email",
-                    style: subTitleStyle,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 8),
-                child: Container(
-                  height: 30,
-                  child: TextField(
-                    onChanged: (text) {
-                      _loginBloc.email.add(text.trim() ?? '');
-                    },
-                    style: TextStyle(fontSize: 14),
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.only(top: 5, bottom: 5, left: 10),
-                      filled: true,
-                      fillColor: MyTheme.dropDownColor,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(7),
-                          borderSide: BorderSide.none),
+              Expanded(
+                  child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 100,
                     ),
-                  ),
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10),
-                child: Text(
-                  "Password",
-                  style: subTitleStyle,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 8),
-                child: Container(
-                  height: 30,
-                  child: TextField(
-                    onChanged: (text) {
-                      _loginBloc.password.add(text.trim() ?? '');
-                    },
-                    obscureText: true,
-                    style: TextStyle(fontSize: 14),
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.only(top: 5, bottom: 5, left: 10),
-                      filled: true,
-                      fillColor: MyTheme.dropDownColor,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(7),
-                          borderSide: BorderSide.none),
+                    Center(
+                      child: Text(
+                        "Login",
+                        style: titleStyle,
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              StreamBuilder<LoginState>(
-                stream: _loginBloc.loginStateStream,
-                builder: (context, snapshot) {
-                  final stateData = snapshot.data;
-                  if (stateData?.isLoading() ?? false) {
-                    print("state is loading");
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: InkWell(
-                      onTap: () {
-                        _loginBloc.onLoginTapped();
-                      },
+
+                    ///email
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, top: 10),
                       child: Container(
-                        height: 30,
-                        width: double.infinity,
-                        child: Center(
-                            child: Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                        decoration: BoxDecoration(
-                          color: MyTheme.appbarTitleColor,
-                          borderRadius: BorderRadius.circular(7),
+                        child: Text(
+                          "Email",
+                          style: subTitleStyle,
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignupPage()));
-                  },
-                  child: Container(
-                    height: 30,
-                    width: double.infinity,
-                    child: Center(
-                        child: Text(
-                      "Sign Up",
-                      style: TextStyle(color: Colors.white),
-                    )),
-                    decoration: BoxDecoration(
-                      color: MyTheme.appbarTitleColor,
-                      borderRadius: BorderRadius.circular(7),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15, right: 15, top: 8),
+                      child: Container(
+                        height: 30,
+                        child: TextField(
+                          onChanged: (text) {
+                            _loginBloc.email.add(text.trim());
+                          },
+                          style: TextStyle(fontSize: 14),
+                          decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(top: 5, bottom: 5, left: 10),
+                            filled: true,
+                            fillColor: MyTheme.dropDownColor,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(7),
+                                borderSide: BorderSide.none),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, top: 10),
+                      child: Text(
+                        "Password",
+                        style: subTitleStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15, right: 15, top: 8),
+                      child: Container(
+                        height: 30,
+                        child: TextField(
+                          onChanged: (text) {
+                            _loginBloc.password.add(text.trim());
+                          },
+                          obscureText: true,
+                          style: TextStyle(fontSize: 14),
+                          decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(top: 5, bottom: 5, left: 10),
+                            filled: true,
+                            fillColor: MyTheme.dropDownColor,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(7),
+                                borderSide: BorderSide.none),
+                          ),
+                        ),
+                      ),
+                    ),
+                    StreamBuilder<LoginState>(
+                      stream: _loginBloc.loginStateStream,
+                      builder: (context, snapshot) {
+                        final stateData = snapshot.data;
+                        if (stateData?.isLoading() ?? false) {
+                          print("state is loading");
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Container(
+                            width: double.infinity,
+                            height: 30,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _loginBloc.onLoginTapped();
+                              },
+                              child: Text("Login"),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    MyTheme.appbarTitleColor),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15, left: 15),
+                      child: Container(
+                        width: double.infinity,
+                        height: 30,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignupPage()));
+                          },
+                          child: Text("Sign Up"),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                MyTheme.appbarTitleColor),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              )
+              )),
             ],
           ),
         ),
@@ -192,13 +201,14 @@ class _LoginPageState extends BaseState<LoginPage> {
       print('/// state is: $state');
       if (state.isError()) {
         print("Error State!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        // AppUtils.showSnackBar(
-        //   state.error?.toString() ?? 'Something went wrong, please try again!',
-        //   _scaffoldKey,
-        //   isError: true,
-        // );
-      } else if (state.isCompleted()) {
-        // navigateRemoveUntil(ContinentPage());
+        AppUtils.showSnackBar(
+          state.error?.toString() ?? 'Something went wrong, please try again!',
+          _scaffoldKey,
+          isError: true,
+        );
+      }
+      if (state.isCompleted()) {
+        navigateRemoveUntil(ContinentPage());
       }
     }));
   }

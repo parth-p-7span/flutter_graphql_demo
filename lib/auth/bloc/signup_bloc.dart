@@ -8,6 +8,9 @@ import 'package:flutter_graphql/base/app_exception.dart';
 import 'package:flutter_graphql/base/base_bloc.dart';
 import 'package:flutter_graphql/base/validation_exception_state.dart';
 import 'package:flutter_graphql/helper/validator.dart';
+import 'package:flutter_graphql/session/model/request/save_session_request.dart';
+import 'package:flutter_graphql/session/model/session.dart';
+import 'package:flutter_graphql/session/repo/session_repo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SignupBloc extends BaseBloc {
@@ -35,13 +38,12 @@ class SignupBloc extends BaseBloc {
   /// Authentication repo
   final AuthRepo _authRepo;
 
+  final SessionRepo _sessionRepo;
+
   /// Rx-Stream which will notify about sign up states.
   final signUpStateStream = PublishSubject<SignUpState>();
 
-  SignupBloc(
-    this._validator,
-    this._authRepo,
-  ) {
+  SignupBloc(this._validator, this._authRepo, this._sessionRepo) {
     _observeForEvents();
     _observeForStates();
   }
@@ -63,7 +65,12 @@ class SignupBloc extends BaseBloc {
 
     return _authRepo
         .signUp(request)
-        .map((value) => SignUpState.completed(value))
+        .flatMap((data) {
+          return _sessionRepo
+              .saveSession(
+                  SaveSessionRequest(session: Session(token: data.token)))!
+              .map((_) => SignUpState.completed(data));
+        })
         .onErrorReturnWith((error, dynamic) => SignUpState.error(error))
         .startWith(SignUpState.loading());
   }
@@ -92,7 +99,6 @@ class SignupBloc extends BaseBloc {
         nameError.add(false);
         emailError.add(false);
         passwordError.add(false);
-
       }
     }));
   }

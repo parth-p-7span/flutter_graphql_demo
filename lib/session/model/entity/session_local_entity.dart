@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/session/model/entity/user_local_entity.dart';
+import 'package:flutter_graphql/user/model/entity/user_graphql_entit.dart';
 
 class SessionLocalEntity {
   String? token;
-  UserLocalEntity? userLocalEntity;
+  UserGraphQlEntity? userGraphQlEntity;
 
   SessionLocalEntity({
     @required this.token,
-    @required this.userLocalEntity,
+    @required this.userGraphQlEntity,
   }) : assert(token != null);
 
   factory SessionLocalEntity.fromJSON(Map<String, dynamic> map) =>
       SessionLocalEntity(
         token: map['token'],
-        userLocalEntity: UserLocalEntity.fromJSON(map['user'] ?? {}),
+        userGraphQlEntity: UserGraphQlEntity.fromJson(map['user'] ?? {}),
       );
 
   Map<String, dynamic> toJSON() {
     return {
       'token': token,
-      'user': userLocalEntity?.toJSON(),
+      'user': userGraphQlEntity?.toJSON(),
     };
   }
 }

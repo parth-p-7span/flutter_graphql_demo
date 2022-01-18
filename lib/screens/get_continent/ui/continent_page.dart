@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_graphql/auth/ui/logout_dialog.dart';
 import 'package:flutter_graphql/screens/get_continent/bloc/continent_bloc.dart';
 import 'package:flutter_graphql/screens/get_continent/di/continent_module.dart';
 import 'package:flutter_graphql/screens/get_continent/model/continent_data.dart';
 import 'package:flutter_graphql/screens/get_continent/state/get_continents_state.dart';
-import 'package:flutter_graphql/screens/get_continent/ui/select_continent_page.dart';
 import 'package:flutter_graphql/screens/get_countries/ui/countries_page.dart';
+import 'package:flutter_graphql/screens/user_details/ui/user_detail_page.dart';
 import 'package:flutter_graphql/theme_data.dart';
-import 'package:flutter_graphql/widgets/custom_appbar.dart';
-import 'package:flutter_graphql/widgets/dropdown_spinner.dart';
+import 'package:flutter_graphql/utils/app_utils.dart';
 import 'package:flutter_graphql/widgets/shimmer_effect.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -32,8 +32,39 @@ class _ContinentPageState extends State<ContinentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
-      appBar: CustomAppbar('Select Continent', false),
+      key: _scaffoldKey,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => UserDetailPage()));
+          },
+          icon: Icon(
+            Icons.menu,
+            color: Colors.black54,
+          ),
+        ),
+        title: Text(
+          "Select Continent",
+          style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.black54)),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context, builder: (context) => LogoutDialog());
+              },
+              icon: Icon(
+                Icons.logout,
+                color: Colors.black54,
+              ))
+        ],
+      ),
       body: Container(
         width: double.infinity,
         color: Colors.white,
@@ -107,42 +138,37 @@ class _ContinentPageState extends State<ContinentPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(20),
-                          child: InkWell(
-                            onTap: () {
-                              if (value?.isNotEmpty ?? false) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CountriesPage(
-                                              continent: value,
-                                            )));
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                        content: Text(
-                                  "Select continent first !!",
-                                  style: MyTheme.latoText(15, Colors.white),
-                                  textAlign: TextAlign.center,
-                                )));
-                              }
-                            },
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                color: MyTheme.appbarTitleColor,
+                          child: Container(
+                            width: double.infinity,
+                            height: 40,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (value?.isNotEmpty ?? false) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CountriesPage(
+                                                continent: value,
+                                              )));
+                                } else {
+                                  AppUtils.showSnackBar(
+                                    'Select continent first!',
+                                    _scaffoldKey,
+                                    isError: false,
+                                  );
+                                }
+                              },
+                              child: Text(
+                                "Get",
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500)),
                               ),
-                              width: double.infinity,
-                              child: Center(
-                                child: Text(
-                                  "Get",
-                                  style: GoogleFonts.lato(
-                                      textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  )),
-                                ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    MyTheme.appbarTitleColor),
                               ),
                             ),
                           ),

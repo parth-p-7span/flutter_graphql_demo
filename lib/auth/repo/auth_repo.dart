@@ -4,6 +4,7 @@ import 'package:flutter_graphql/auth/model/auth_data.dart';
 import 'package:flutter_graphql/auth/model/request/login_request.dart';
 import 'package:flutter_graphql/auth/model/request/signup_request.dart';
 import 'package:flutter_graphql/auth/source/auth_graphql_source.dart';
+import 'package:flutter_graphql/session/di/session_module.dart';
 
 /// Authentication repository which holds auth related functions
 class AuthRepo {
@@ -32,5 +33,9 @@ class AuthRepo {
     return _authGraphQlSource
         .signUp(request)
         .map((entity) => _signUpEntityMapper.map(entity));
+  }
+
+  Stream<bool>? logout(){
+    return SessionModule().getSessionRepo().clearSession();
   }
 }

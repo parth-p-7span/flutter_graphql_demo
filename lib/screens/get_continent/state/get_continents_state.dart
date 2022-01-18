@@ -5,5 +5,5 @@ class GetContinentsState extends BaseUiState<ContinentData> {
   GetContinentsState.loading() : super.loading();
   GetContinentsState.completed(ContinentData data)
       : super.completed(data: data);
-  GetContinentsState.error(dynamic error) : super.error();
+  GetContinentsState.error(dynamic error) : super.error(error);
 }

@@ -10,16 +10,15 @@ class CountryUiStateManager {
   );
 
   Stream<GetCountriesState> getCountries(GetCountryRequest request) {
-    return _countryRepo
-        .getCountries(request)
-        .map((data) {
-          return GetCountriesState.completed(
-            data,
-          );
-        })
-        .onErrorReturnWith((error, dynamic) => GetCountriesState.error(
-              error,
-            ))
-        .startWith(GetCountriesState.loading());
+    return _countryRepo.getCountries(request).map((data) {
+      return GetCountriesState.completed(
+        data,
+      );
+    }).onErrorReturnWith((error, dynamic) {
+      print("Error ///////" + error.toString());
+      return GetCountriesState.error(
+        error,
+      );
+    }).startWith(GetCountriesState.loading());
   }
 }
