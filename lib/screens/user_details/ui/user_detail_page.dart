@@ -23,7 +23,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar("User Details", true, false),
+      appBar: CustomAppbar("User Details", true, false, false),
       body: StreamBuilder<Session>(
           stream: _sessionRepo.getSession(),
           builder: (context, snapshot) {

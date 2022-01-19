@@ -31,7 +31,7 @@ class _CountriesPageState extends State<CountriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: CustomAppbar("Countries", true, false),
+      appBar: CustomAppbar("Countries", true, false, false),
       body: Container(
         color: Colors.white,
         child: StreamBuilder<GetCountriesState>(

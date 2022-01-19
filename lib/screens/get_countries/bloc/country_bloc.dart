@@ -38,7 +38,7 @@ class CountryBloc extends BaseBloc {
 
   Stream<GetCountriesState> _getCountriesList(GetCountryRequest request) {
     var temp = _countryUiStateManager.getCountries(request);
-    print(temp.toString());
+    // print(temp.toString());
     return temp;
   }
 

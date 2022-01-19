@@ -146,6 +146,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_reorderable_list:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "52b598c48e85f2f944aada96a1a9ed5a60387373"
+      url: "https://github.com/eggnstone/flutter_reorderable_list.git"
+    source: git
+    version: "0.1.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter

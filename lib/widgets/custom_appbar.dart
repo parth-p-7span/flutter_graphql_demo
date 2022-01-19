@@ -9,8 +9,10 @@ class CustomAppbar extends StatefulWidget with PreferredSizeWidget {
   final String title;
   final bool backBtn;
   final bool logoutBtn;
+  final bool sortingBtn;
 
-  CustomAppbar(this.title, this.backBtn, this.logoutBtn, {Key? key})
+  CustomAppbar(this.title, this.backBtn, this.logoutBtn, this.sortingBtn,
+      {Key? key})
       : preferredSize = Size.fromHeight(50.0),
         super(key: key);
 
@@ -34,6 +36,16 @@ class _CustomAppbarState extends State<CustomAppbar> {
       ),
       backgroundColor: Colors.white,
       elevation: 1,
+      actions: [
+        widget.sortingBtn
+            ? IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.sort_sharp,
+                  color: Colors.black54,
+                ))
+            : Container()
+      ],
     );
   }
 }

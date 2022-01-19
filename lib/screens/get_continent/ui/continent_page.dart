@@ -6,6 +6,7 @@ import 'package:flutter_graphql/screens/get_continent/di/continent_module.dart';
 import 'package:flutter_graphql/screens/get_continent/model/continent_data.dart';
 import 'package:flutter_graphql/screens/get_continent/state/get_continents_state.dart';
 import 'package:flutter_graphql/screens/get_countries/ui/countries_page.dart';
+import 'package:flutter_graphql/screens/polls/ui/poll_page.dart';
 import 'package:flutter_graphql/screens/user_details/ui/user_detail_page.dart';
 import 'package:flutter_graphql/theme_data.dart';
 import 'package:flutter_graphql/utils/app_utils.dart';
@@ -160,6 +161,33 @@ class _ContinentPageState extends State<ContinentPage> {
                               },
                               child: Text(
                                 "Get",
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    MyTheme.appbarTitleColor),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Container(
+                            width: double.infinity,
+                            height: 40,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PollPage()));
+                              },
+                              child: Text(
+                                "Go to Poll section",
                                 style: GoogleFonts.lato(
                                     textStyle: TextStyle(
                                         fontSize: 15,
