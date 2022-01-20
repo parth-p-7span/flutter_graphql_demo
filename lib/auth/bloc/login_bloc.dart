@@ -58,7 +58,8 @@ class LoginBloc extends BaseBloc {
 
     return _authRepo.login(request).flatMap((data) {
       return _sessionRepo
-          .saveSession(SaveSessionRequest(session: Session(token: data.token)))!
+          .saveSession(SaveSessionRequest(
+              session: Session(token: data.token, user: data.user)))!
           .map((_) => LoginState.completed(data));
     }).onErrorReturnWith((error, dynamic) {
       print("---------------Error : " + error.toString());

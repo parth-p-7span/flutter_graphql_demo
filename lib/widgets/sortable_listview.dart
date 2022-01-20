@@ -52,7 +52,7 @@ class SortableListView extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (context, int index) {
                 final widget = onSortableItemBuilder.call(context, index);
-                final isReorderable = isReOrderable.call(index) ?? false;
+                final isReorderable = isReOrderable.call(index);
                 if (!isReorderable) return widget;
                 return SortableListItem(
                   child: widget,

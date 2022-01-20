@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/auth/ui/logout_dialog.dart';
+import 'package:flutter_graphql/screens/badges/ui/badges_page.dart';
 import 'package:flutter_graphql/screens/get_continent/bloc/continent_bloc.dart';
 import 'package:flutter_graphql/screens/get_continent/di/continent_module.dart';
 import 'package:flutter_graphql/screens/get_continent/model/continent_data.dart';
@@ -188,6 +189,33 @@ class _ContinentPageState extends State<ContinentPage> {
                               },
                               child: Text(
                                 "Go to Poll section",
+                                style: GoogleFonts.lato(
+                                    textStyle: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    MyTheme.appbarTitleColor),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Container(
+                            width: double.infinity,
+                            height: 40,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => BadgesPage()));
+                              },
+                              child: Text(
+                                "Go to Badges",
                                 style: GoogleFonts.lato(
                                     textStyle: TextStyle(
                                         fontSize: 15,

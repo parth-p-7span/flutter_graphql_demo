@@ -14,4 +14,10 @@ class MyTheme {
       ),
     );
   }
+
+  static TextStyle latoTextBold(double size, Color color, FontWeight weight) {
+    return GoogleFonts.lato(
+      textStyle: TextStyle(fontSize: size, color: color, fontWeight: weight),
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/auth/ui/login_page.dart';
+import 'package:flutter_graphql/screens/badges/ui/badges_page.dart';
 import 'package:flutter_graphql/screens/get_continent/ui/continent_page.dart';
 import 'package:flutter_graphql/session/di/session_module.dart';
 import 'package:flutter_graphql/session/model/session.dart';
