@@ -39,33 +39,16 @@ class _ContinentPageState extends State<ContinentPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => UserDetailPage()));
-          },
-          icon: Icon(
-            Icons.menu,
-            color: Colors.black54,
-          ),
+        leading: BackButton(
+          color: MyTheme.appbarTitleColor,
         ),
         title: Text(
           "Select Continent",
-          style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.black54)),
+          style: GoogleFonts.lato(
+              textStyle: TextStyle(color: MyTheme.appbarTitleColor)),
         ),
         backgroundColor: Colors.white,
         elevation: 1,
-        actions: [
-          IconButton(
-              onPressed: () {
-                showDialog(
-                    context: context, builder: (context) => LogoutDialog());
-              },
-              icon: Icon(
-                Icons.logout,
-                color: Colors.black54,
-              ))
-        ],
       ),
       body: Container(
         width: double.infinity,
@@ -175,60 +158,6 @@ class _ContinentPageState extends State<ContinentPage> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Container(
-                            width: double.infinity,
-                            height: 40,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PollPage()));
-                              },
-                              child: Text(
-                                "Go to Poll section",
-                                style: GoogleFonts.lato(
-                                    textStyle: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500)),
-                              ),
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    MyTheme.appbarTitleColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Container(
-                            width: double.infinity,
-                            height: 40,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => BadgesPage()));
-                              },
-                              child: Text(
-                                "Go to Badges",
-                                style: GoogleFonts.lato(
-                                    textStyle: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500)),
-                              ),
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    MyTheme.appbarTitleColor),
-                              ),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   );

@@ -21,6 +21,7 @@ class _BadgesPageState extends State<BadgesPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   late BadgesBloc _badgesBloc;
   int totalCount = 0;
+  bool isSearch = false;
 
   @override
   void initState() {
@@ -34,21 +35,54 @@ class _BadgesPageState extends State<BadgesPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Badges",
-            style: GoogleFonts.lato(
-                textStyle: TextStyle(color: MyTheme.appbarTitleColor))),
-        leading: BackButton(color: MyTheme.appbarTitleColor),
+        automaticallyImplyLeading: false,
+        title: !isSearch
+            ? Text(
+                "Badges",
+                style: GoogleFonts.lato(
+                  textStyle: TextStyle(color: MyTheme.appbarTitleColor),
+                ),
+              )
+            : TextField(
+                cursorHeight: 20,
+                autofocus: true,
+                onChanged: (text) {
+                  _badgesBloc.searchQueryStream.add(text);
+                },
+                decoration: InputDecoration(
+                    hintText: "Search", border: InputBorder.none),
+              ),
+        leading: !isSearch ? BackButton(color: MyTheme.appbarTitleColor) : null,
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          !isSearch
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      this.isSearch = !this.isSearch;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.black54,
+                  ))
+              : IconButton(
+                  onPressed: () {
+                    setState(() {
+                      this.isSearch = !this.isSearch;
+                    });
+                  },
+                  icon: Icon(Icons.close, color: Colors.black54)),
           IconButton(
-              onPressed: () {
-                _showFilterPage();
-              },
-              icon: Icon(
-                Icons.sort,
-                color: Colors.black54,
-              ))
+            onPressed: () {
+              _showFilterPage();
+            },
+            icon: Icon(
+              Icons.sort,
+              color: Colors.black54,
+            ),
+          ),
         ],
       ),
       body: Container(
@@ -76,17 +110,22 @@ class _BadgesPageState extends State<BadgesPage> {
               initialData: _badgesBloc.badgesDataStream.valueOrNull,
               builder: (context, snapshot) {
                 final items = snapshot.data?.badges ?? [];
+                if (items.isEmpty) {
+                  return Container(
+                      child: Center(child: Text("Data not found")));
+                }
                 return ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: ListTile(
-                          title: Text(items[index].name ?? ""),
-                          tileColor: MyTheme.dropDownColor,
-                        ),
-                      );
-                    });
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: ListTile(
+                        title: Text(items[index].name ?? ""),
+                        tileColor: MyTheme.dropDownColor,
+                      ),
+                    );
+                  },
+                );
               },
             );
           },

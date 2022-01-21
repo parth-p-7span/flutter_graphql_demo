@@ -1,4 +1,5 @@
 import 'package:flutter_graphql/base/base_bloc.dart';
+import 'package:flutter_graphql/screens/badges/event/search_event.dart';
 import 'package:flutter_graphql/screens/badges/model/badge.dart';
 import 'package:flutter_graphql/screens/badges/model/badge_data.dart';
 import 'package:flutter_graphql/screens/badges/model/request/get_badge_request.dart';
@@ -28,6 +29,8 @@ class BadgesBloc extends BaseBloc {
   ) {
     getBadges(
         request: GetBadgesRequest(businessId: 131026.toString(), page: 1));
+    _observeForEvents();
+    _observeForSearchQueryChanges();
   }
 
   void getBadges({required GetBadgesRequest request}) {
@@ -73,6 +76,28 @@ class BadgesBloc extends BaseBloc {
       filter: filter,
       search: badgesDataStream.value.search,
     ));
+  }
+
+  void _observeForSearchQueryChanges() {
+    subscriptions.add(searchQueryStream.listen((query) {
+      event.add(SearchEvent(query.trim()));
+    }));
+  }
+
+  void _handleSearchEvent(SearchEvent event) {
+    var currentData = badgesDataStream.value;
+    getBadges(
+        request: GetBadgesRequest(
+            businessId: 131026.toString(),
+            page: 1,
+            search: event.data,
+            filter: currentData.filter));
+  }
+
+  void _observeForEvents() {
+    subscriptions.add(event.listen((event) {
+      if (event is SearchEvent) _handleSearchEvent(event);
+    }));
   }
 
   void _handleData(BadgesData? newData) {

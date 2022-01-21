@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/auth/ui/login_page.dart';
-import 'package:flutter_graphql/screens/badges/ui/badges_page.dart';
-import 'package:flutter_graphql/screens/get_continent/ui/continent_page.dart';
+import 'package:flutter_graphql/screens/dashboard/dashboard.dart';
+import 'package:flutter_graphql/screens/notifications/api/notification_api.dart';
+import 'package:flutter_graphql/screens/notifications/ui/notification_clicked_page.dart';
 import 'package:flutter_graphql/session/di/session_module.dart';
 import 'package:flutter_graphql/session/model/session.dart';
 import 'package:flutter_graphql/session/repo/session_repo.dart';
@@ -38,7 +39,7 @@ class _MyAppState extends State<MyApp> {
           print(snapshot.data?.token.toString());
           Future.delayed(const Duration(milliseconds: 500));
           if (snapshot.data != null) {
-            return ContinentPage();
+            return DashboardPage();
           } else {
             return LoginPage();
           }
