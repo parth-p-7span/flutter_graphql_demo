@@ -10,15 +10,15 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
 
   /// Enforce extender to return base bloc so we can clear on dispose.
   /// This will prevent mistakes of forgetting calling dispose of BLoC.
-  BaseBloc getBaseBloc();
+  BaseBloc? getBaseBloc();
 
   /// Observe for hide keyboard event
   void observeForHideKeyboard() {
-    final subscription = getBaseBloc().hideKeyboardSubject.listen((_) {
+    final subscription = getBaseBloc()?.hideKeyboardSubject.listen((_) {
       print('/// I am called');
       FocusScope.of(context).requestFocus(new FocusNode());
     });
-    subscriptions.add(subscription);
+    subscriptions.add(subscription!);
   }
 
   @override
@@ -28,7 +28,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
 
     /// Extender might not have a BLoC implementation yet
     /// and will return null in that case.
-    getBaseBloc().dispose();
+    getBaseBloc()?.dispose();
   }
 
   void navigateRemoveUntil(Widget widget, [RoutePredicate? predicate]) {

@@ -31,7 +31,7 @@ class SessionRepo {
   /// Get current session
   ///
   /// returns null if no active session found
-  Stream<Session>? getSession() {
+  Stream<Session> getSession() {
     return _sessionLocalSource!
         .getSession()
         .map((entity) => _sessionEntityMapper!.map(entity));

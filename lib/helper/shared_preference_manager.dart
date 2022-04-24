@@ -19,7 +19,7 @@ class SharedPreferenceManager {
   }
 
   /// Get [String] from the [SharedPreferences]
-  Stream<String>? getString(String key) {
+  Stream<String> getString(String key) {
     return _getSharedPreference()
         .map((preference) => preference.getString(key));
   }

@@ -5,6 +5,7 @@ import 'package:flutter_graphql/auth/di/auth_module.dart';
 import 'package:flutter_graphql/auth/state/login_state.dart';
 import 'package:flutter_graphql/auth/ui/signup_page.dart';
 import 'package:flutter_graphql/base/base_bloc.dart';
+import 'package:flutter_graphql/screens/dashboard/dashboard.dart';
 import 'package:flutter_graphql/screens/get_continent/ui/continent_page.dart';
 import 'package:flutter_graphql/base/base_state.dart';
 import 'package:flutter_graphql/session/di/session_module.dart';
@@ -168,10 +169,7 @@ class _LoginPageState extends BaseState<LoginPage> {
                         height: 30,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignupPage()));
+                            Navigator.of(context).pushNamed('/signup');
                           },
                           child: Text("Sign Up"),
                           style: ButtonStyle(
@@ -208,7 +206,7 @@ class _LoginPageState extends BaseState<LoginPage> {
         );
       }
       if (state.isCompleted()) {
-        navigateRemoveUntil(ContinentPage());
+        navigateRemoveUntil(DashboardPage());
       }
     }));
   }

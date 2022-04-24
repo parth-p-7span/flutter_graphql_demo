@@ -109,7 +109,17 @@ class _PollPageState extends State<PollPage> {
                           key: refreshKey,
                           onRefresh: refreshList,
                           child: ReorderableListView.builder(
-                              onReorder: (oldIndex, newIndex) {},
+                              onReorder: (oldIndex, newIndex) {
+                                var existingList =
+                                    _pollBloc.pollDataStream.value;
+                                final index = newIndex > oldIndex
+                                    ? newIndex - 1
+                                    : newIndex;
+                                final data =
+                                    existingList.polls!.removeAt(oldIndex);
+                                existingList.polls?.insert(index, data);
+                                _pollBloc.pollDataStream.add(existingList);
+                              },
                               itemCount: items.length + extraItemCount,
                               itemBuilder: (context, index) {
                                 if (index >= items.length) {
@@ -156,15 +166,4 @@ class _PollPageState extends State<PollPage> {
     });
     return null;
   }
-
-  // bool _reorderCallback(Key item, Key newPosition) {
-  //   int draggingIndex = _indexOfKey(item);
-  //   int newPositionIndex = _indexOfKey(newPosition);
-  //   var existingList = _chargeBloc.chargeDataStream.value;
-  //   final data = existingList.charges.removeAt(draggingIndex);
-  //   existingList.charges.insert(newPositionIndex, data);
-  //   _chargeBloc.chargeDataStream.add(existingList);
-  //
-  //   return true;
-  // }
 }

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/auth/ui/login_page.dart';
+import 'package:flutter_graphql/base/base_state.dart';
 import 'package:flutter_graphql/screens/dashboard/dashboard.dart';
-import 'package:flutter_graphql/screens/notifications/api/notification_api.dart';
-import 'package:flutter_graphql/screens/notifications/ui/notification_clicked_page.dart';
 import 'package:flutter_graphql/session/di/session_module.dart';
 import 'package:flutter_graphql/session/model/session.dart';
 import 'package:flutter_graphql/session/repo/session_repo.dart';
+import 'package:flutter_graphql/theme_data.dart';
+import 'package:flutter_graphql/utils/route_generator.dart';
+
+import 'base/base_bloc.dart';
 
 void main() async {
   runApp(MaterialApp(
-    title: 'GQL demo',
-    home: MyApp(),
+    title: 'My app',
+    initialRoute: '/',
+    onGenerateRoute: RouteGenerator.generateRoute,
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -22,9 +26,8 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends BaseState<MyApp> {
   late SessionRepo _sessionRepo;
-
   @override
   void initState() {
     _sessionRepo = SessionModule().getSessionRepo();
@@ -36,13 +39,29 @@ class _MyAppState extends State<MyApp> {
     return StreamBuilder<Session>(
         stream: _sessionRepo.getSession(),
         builder: (context, snapshot) {
-          print(snapshot.data?.token.toString());
-          Future.delayed(const Duration(milliseconds: 500));
-          if (snapshot.data != null) {
-            return DashboardPage();
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data != null) {
+              return DashboardPage();
+            } else {
+              return LoginPage();
+            }
           } else {
-            return LoginPage();
+            return Container(
+              color: MyTheme.splashColor,
+              child: Center(
+                child: Image.asset(
+                  'assets/images/splash.png',
+                  height: 100,
+                  width: 100,
+                ),
+              ),
+            );
           }
         });
+  }
+
+  @override
+  BaseBloc? getBaseBloc() {
+    return null;
   }
 }

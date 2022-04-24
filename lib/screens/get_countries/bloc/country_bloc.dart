@@ -46,6 +46,7 @@ class CountryBloc extends BaseBloc {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    getCountryStateStream.close();
     countryDataStream.close();
   }
 }

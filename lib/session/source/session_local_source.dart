@@ -10,7 +10,7 @@ import 'package:rxdart/rxdart.dart';
 
 class SessionLocalSource {
   /// [SharedPreferenceManager] for storing session
-  final SharedPreferenceManager? _preferenceManager;
+  final SharedPreferenceManager _preferenceManager;
 
   /// Mapper
   final SessionEntityMapper? _sessionEntityMapper;
@@ -27,7 +27,7 @@ class SessionLocalSource {
   /// returns the stored session entity
   Stream<SessionLocalEntity?> saveSession(SaveSessionRequest request) {
     final entity = _sessionEntityMapper?.reverseMap(request.session);
-    return _preferenceManager!
+    return _preferenceManager
         .setString('session', json.encode(entity?.toJSON()))!
         .map((_) => entity);
   }
@@ -46,14 +46,21 @@ class SessionLocalSource {
   /// Get current session
   ///
   /// Returns null if no active session found
+  // Stream<SessionLocalEntity?> getSession() {
+  //   return _preferenceManager.getString('session').map((sessionStr) {
+  //     if (sessionStr.isEmpty) return null;
+  //     return SessionLocalEntity.fromJSON(json.decode(sessionStr));
+  //   });
+  // }
+
   Stream<SessionLocalEntity?> getSession() {
-    return _preferenceManager!.getString('session')!.map((sessionStr) {
+    return _preferenceManager.getString('session').map((sessionStr) {
       if (sessionStr.isEmpty) return null;
       return SessionLocalEntity.fromJSON(json.decode(sessionStr));
     });
   }
 
   Stream<bool>? clearSession() {
-    return _preferenceManager!.setString('session', null);
+    return _preferenceManager.setString('session', null);
   }
 }

@@ -71,17 +71,11 @@ class _DashboardPageState extends State<DashboardPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                GotoBtn(context, "Select Continent",
-                    MaterialPageRoute(builder: (context) => ContinentPage())),
-                GotoBtn(context, "Poll Section",
-                    MaterialPageRoute(builder: (context) => PollPage())),
-                GotoBtn(context, "Go to Badges",
-                    MaterialPageRoute(builder: (context) => BadgesPage())),
-                GotoBtn(
-                    context,
-                    "Timer Notification",
-                    MaterialPageRoute(
-                        builder: (context) => TimerNotification())),
+                GotoBtn(context, "Select Continent", '/continent'),
+                GotoBtn(context, "Poll Section", '/poll'),
+                GotoBtn(context, "Go to Badges", '/badges'),
+                GotoBtn(context, "Timer Notification", '/timerNotification'),
+                GotoBtn(context, "Searchable Dropdown", '/searchableDropdown'),
               ],
             ),
           ),
@@ -90,7 +84,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget GotoBtn(BuildContext context, String txt, Route<dynamic> route) {
+  Widget GotoBtn(BuildContext context, String txt, String routeName) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
@@ -98,7 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
         height: 40,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push(context, route);
+            Navigator.of(context).pushNamed(routeName);
           },
           child: Text(
             txt,

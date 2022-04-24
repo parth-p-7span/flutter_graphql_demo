@@ -129,12 +129,8 @@ class _ContinentPageState extends State<ContinentPage> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (value?.isNotEmpty ?? false) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => CountriesPage(
-                                                continent: value,
-                                              )));
+                                  Navigator.of(context).pushNamed('/countries',
+                                      arguments: value);
                                 } else {
                                   AppUtils.showSnackBar(
                                     'Select continent first!',
